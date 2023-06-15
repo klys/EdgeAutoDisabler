@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,12 @@ namespace EdgeAutoDisabler
     public partial class Service1 : ServiceBase
     {
         Timer timer = new Timer(); // name space(using System.Timers;)  
+        private static readonly ILogger<Service1> _logger;
+        public static Service1(ILogger<Service1> logger)
+        {
+            _logger = logger;
+        }
+
         public Service1()
         {
             InitializeComponent();
@@ -62,6 +69,7 @@ namespace EdgeAutoDisabler
 
         static void killProcess(string ProcessName)
         {
+            _logger.LogInformation("[Service] killProcess");
             foreach (var process in Process.GetProcessesByName(ProcessName))
             {
                 process.Kill();
